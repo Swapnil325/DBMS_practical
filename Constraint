@@ -1,0 +1,303 @@
+Microsoft Windows [Version 10.0.26100.4652]
+(c) Microsoft Corporation. All rights reserved.
+
+C:\Program Files\MySQL\MySQL Server 8.0\bin>mysql -h localhost -u root -p
+Enter password: ****
+Welcome to the MySQL monitor.  Commands end with ; or \g.
+Your MySQL connection id is 10
+Server version: 8.0.42 MySQL Community Server - GPL
+
+Copyright (c) 2000, 2025, Oracle and/or its affiliates.
+
+Oracle is a registered trademark of Oracle Corporation and/or its
+affiliates. Other names may be trademarks of their respective
+owners.
+
+Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
+
+mysql> show databases;
++--------------------+
+| Database           |
++--------------------+
+| bank               |
+| information_schema |
+| mysql              |
+| performance_schema |
+| sys                |
++--------------------+
+5 rows in set (0.00 sec)
+
+mysql> use bank;
+Database changed
+mysql> show tables;
++----------------+
+| Tables_in_bank |
++----------------+
+| customer       |
++----------------+
+1 row in set (0.01 sec)
+
+mysql> CREATE TABLE account (
+    ->     ac_id INT PRIMARY KEY,
+    ->     cust_id VARCHAR(20),
+    ->     ac_type VARCHAR(20),
+    ->     balance DECIMAL(10,2),
+    ->     create_date DATETIME DEFAULT CURRENT_TIMESTAMP,
+    ->     FOREIGN KEY (cust_id) REFERENCES customer(cust_id)
+    -> );
+Query OK, 0 rows affected (0.03 sec)
+
+mysql> show tables;
++----------------+
+| Tables_in_bank |
++----------------+
+| account        |
+| customer       |
++----------------+
+2 rows in set (0.00 sec)
+
+mysql> desc account;
++-------------+---------------+------+-----+-------------------+-------------------+
+| Field       | Type          | Null | Key | Default           | Extra             |
++-------------+---------------+------+-----+-------------------+-------------------+
+| ac_id       | int           | NO   | PRI | NULL              |                   |
+| cust_id     | varchar(20)   | YES  | MUL | NULL              |                   |
+| ac_type     | varchar(20)   | YES  |     | NULL              |                   |
+| balance     | decimal(10,2) | YES  |     | NULL              |                   |
+| create_date | datetime      | YES  |     | CURRENT_TIMESTAMP | DEFAULT_GENERATED |
++-------------+---------------+------+-----+-------------------+-------------------+
+5 rows in set (0.03 sec)
+
+mysql> select* from customer;
++---------+-----------+-------------+-------------------+------------+------+
+| cust_id | cust_name | cust_addres | cust_email        | cust_ph_no | age  |
++---------+-----------+-------------+-------------------+------------+------+
+| A101    | swapnil   | pune        | swap@gmail.com    |  566416664 |   19 |
+| A102    | abhi      | kolhapur    | abhi@gmail.com    |   56461946 | NULL |
+| A103    | swaroop   | kolhapur    | swaroop@gmail.com |   59469825 | NULL |
+| A104    | atharv    | kolhapur    | atharv@gmail.com  |   94654157 | NULL |
++---------+-----------+-------------+-------------------+------------+------+
+4 rows in set (0.03 sec)
+mysql> INSERT INTO account VALUES (111,'A101','saving',26000,'2025-07-29');
+Query OK, 1 row affected (0.03 sec)
+
+mysql> select* from account;
++-------+---------+---------+----------+---------------------+
+| ac_id | cust_id | ac_type | balance  | create_date         |
++-------+---------+---------+----------+---------------------+
+|   111 | A101    | saving  | 26000.00 | 2025-07-29 00:00:00 |
++-------+---------+---------+----------+---------------------+
+1 row in set (0.00 sec)
+
+mysql> ALTER TABLE account
+    -> MODIFY create_date DATE;
+Query OK, 1 row affected (0.06 sec)
+Records: 1  Duplicates: 0  Warnings: 0
+
+mysql> select* from account;
++-------+---------+---------+----------+-------------+
+| ac_id | cust_id | ac_type | balance  | create_date |
++-------+---------+---------+----------+-------------+
+|   111 | A101    | saving  | 26000.00 | 2025-07-29  |
++-------+---------+---------+----------+-------------+
+1 row in set (0.00 sec)
+
+mysql> INSERT INTO account VALUES (112,'A102','saving',29000,'2025-07-29');
+Query OK, 1 row affected (0.01 sec)
+
+mysql> INSERT INTO account VALUES (113,'A103','saving',30000,'2025-07-29');
+Query OK, 1 row affected (0.01 sec)
+
+mysql> INSERT INTO account VALUES (114,'A104','saving',31000,'2025-07-29');
+Query OK, 1 row affected (0.01 sec)
+
+mysql> select* from account;
++-------+---------+---------+----------+-------------+
+| ac_id | cust_id | ac_type | balance  | create_date |
++-------+---------+---------+----------+-------------+
+|   111 | A101    | saving  | 26000.00 | 2025-07-29  |
+|   112 | A102    | saving  | 29000.00 | 2025-07-29  |
+|   113 | A103    | saving  | 30000.00 | 2025-07-29  |
+|   114 | A104    | saving  | 31000.00 | 2025-07-29  |
++-------+---------+---------+----------+-------------+
+4 rows in set (0.00 sec)
+
+mysql> CREATE TABLE employee (emp_id int PRIMARY KEY,emp_name VARCHAR(20),emp_position VARCHAR(20),branch VARCHAR(20),emp_salary int );
+Query OK, 0 rows affected (0.05 sec)
+mysql> CREATE TABLE transaction (tran_id int PRIMARY KEY , ac_id int , tran_type VARCHAR(50), amount decimal(10,2) , tran_date DATE , FOREIGN KEY(ac_id) REFERENCES account(ac_id));
+Query OK, 0 rows affected (0.04 sec)
+
+mysql> CREATE VIEW view1 AS SELECT customer.cust_name, account.ac_id, account.balance FROM customer JOIN account ON customer.cust_id = account.cust_id;
+Query OK, 0 rows affected (0.03 sec)
+
+mysql> SELECT * FROM view1 ;
++-----------+-------+----------+
+| cust_name | ac_id | balance  |
++-----------+-------+----------+
+| swapnil   |   111 | 26000.00 |
+| abhi      |   112 | 29000.00 |
+| swaroop   |   113 | 30000.00 |
+| atharv    |   114 | 31000.00 |
++-----------+-------+----------+
+4 rows in set (0.01 sec)
+
+mysql> SELECT * FROM transaction;
+Empty set (0.01 sec)
+
+mysql> desc transaction;
++-----------+---------------+------+-----+---------+-------+
+| Field     | Type          | Null | Key | Default | Extra |
++-----------+---------------+------+-----+---------+-------+
+| tran_id   | int           | NO   | PRI | NULL    |       |
+| ac_id     | int           | YES  | MUL | NULL    |       |
+| tran_type | varchar(50)   | YES  |     | NULL    |       |
+| amount    | decimal(10,2) | YES  |     | NULL    |       |
+| tran_date | date          | YES  |     | NULL    |       |
++-----------+---------------+------+-----+---------+-------+
+5 rows in set (0.00 sec)
+
+mysql> INSERT INTO  transaction VALUES( 210,111,'UPI',100.02,'2025-07-29');
+Query OK, 1 row affected (0.01 sec)
+
+mysql> INSERT INTO  transaction VALUES( 211,112,'cash',100.03,'2025-07-30');
+Query OK, 1 row affected (0.01 sec)
+
+mysql> INSERT INTO  transaction VALUES( 212,113,'cash',100.04,'2025-07-31');
+Query OK, 1 row affected (0.03 sec)
+
+mysql> INSERT INTO  transaction VALUES( 213,114,'upi',100.05,'2025-08-1');
+Query OK, 1 row affected (0.01 sec)
+
+mysql> SELECT * FROM transaction;
++---------+-------+-----------+--------+------------+
+| tran_id | ac_id | tran_type | amount | tran_date  |
++---------+-------+-----------+--------+------------+
+|     210 |   111 | UPI       | 100.02 | 2025-07-29 |
+|     211 |   112 | cash      | 100.03 | 2025-07-30 |
+|     212 |   113 | cash      | 100.04 | 2025-07-31 |
+|     213 |   114 | upi       | 100.05 | 2025-08-01 |
++---------+-------+-----------+--------+------------+
+4 rows in set (0.00 sec)
+
+mysql> CREATE INDEX ind_tran_date ON transction(tran_date);
+ERROR 1146 (42S02): Table 'bank.transction' doesn't exist
+mysql> CREATE INDEX ind_tran_date ON transaction(tran_date);
+Query OK, 0 rows affected (0.06 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> desc transaction;
++-----------+---------------+------+-----+---------+-------+
+| Field     | Type          | Null | Key | Default | Extra |
++-----------+---------------+------+-----+---------+-------+
+| tran_id   | int           | NO   | PRI | NULL    |       |
+| ac_id     | int           | YES  | MUL | NULL    |       |
+| tran_type | varchar(50)   | YES  |     | NULL    |       |
+| amount    | decimal(10,2) | YES  |     | NULL    |       |
+| tran_date | date          | YES  | MUL | NULL    |       |
++-----------+---------------+------+-----+---------+-------+
+5 rows in set (0.00 sec)
+
+mysql> SELECT * FROM transaction;
++---------+-------+-----------+--------+------------+
+| tran_id | ac_id | tran_type | amount | tran_date  |
++---------+-------+-----------+--------+------------+
+|     210 |   111 | UPI       | 100.02 | 2025-07-29 |
+|     211 |   112 | cash      | 100.03 | 2025-07-30 |
+|     212 |   113 | cash      | 100.04 | 2025-07-31 |
+|     213 |   114 | upi       | 100.05 | 2025-08-01 |
++---------+-------+-----------+--------+------------+
+4 rows in set (0.00 sec)
+
+mysql> SHOW INDEX FROM transaction;
++-------------+------------+---------------+--------------+-------------+-----------+-------------+----------+--------+------+------------+---------+---------------+---------+------------+
+| Table       | Non_unique | Key_name      | Seq_in_index | Column_name | Collation | Cardinality | Sub_part | Packed | Null | Index_type | Comment | Index_comment | Visible | Expression |
++-------------+------------+---------------+--------------+-------------+-----------+-------------+----------+--------+------+------------+---------+---------------+---------+------------+
+| transaction |          0 | PRIMARY       |            1 | tran_id     | A         |           4 |     NULL |   NULL |      | BTREE      |         |               | YES     | NULL       |
+| transaction |          1 | ac_id         |            1 | ac_id       | A         |           4 |     NULL |   NULL | YES  | BTREE      |         |               | YES     | NULL       |
+| transaction |          1 | ind_tran_date |            1 | tran_date   | A         |           4 |     NULL |   NULL | YES  | BTREE      |         |               | YES     | NULL       |
++-------------+------------+---------------+--------------+-------------+-----------+-------------+----------+--------+------+------------+---------+---------------+---------+------------+
+3 rows in set (0.02 sec)
+
+mysql> SELECT  * FROM transaction WHERE amount>100.02;
++---------+-------+-----------+--------+------------+
+| tran_id | ac_id | tran_type | amount | tran_date  |
++---------+-------+-----------+--------+------------+
+|     211 |   112 | cash      | 100.03 | 2025-07-30 |
+|     212 |   113 | cash      | 100.04 | 2025-07-31 |
+|     213 |   114 | upi       | 100.05 | 2025-08-01 |
++---------+-------+-----------+--------+------------+
+3 rows in set (0.01 sec)
+
+mysql> ALTER TABLE transaction MODIFY amount decimal(10,2) CHECK (amount>0);
+Query OK, 4 rows affected (0.12 sec)
+Records: 4  Duplicates: 0  Warnings: 0
+
+mysql> ALTER TABLE transaction MODIFY tran_date DATE NULL DEFAULT (CURRENT_DATE);
+Query OK, 0 rows affected (0.02 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> desc account;
++-------------+---------------+------+-----+---------+-------+
+| Field       | Type          | Null | Key | Default | Extra |
++-------------+---------------+------+-----+---------+-------+
+| ac_id       | int           | NO   | PRI | NULL    |       |
+| cust_id     | varchar(20)   | YES  | MUL | NULL    |       |
+| ac_type     | varchar(20)   | YES  |     | NULL    |       |
+| balance     | decimal(10,2) | YES  |     | NULL    |       |
+| create_date | date          | YES  |     | NULL    |       |
++-------------+---------------+------+-----+---------+-------+
+5 rows in set (0.00 sec)
+
+mysql> INSERT INTO account VALUES(117,218,'Saving',100.50,'2025-01-01');
+ERROR 1452 (23000): Cannot add or update a child row: a foreign key constraint fails (`bank`.`account`, CONSTRAINT `account_ibfk_1` FOREIGN KEY (`cust_id`) REFERENCES `customer` (`cust_id`))
+mysql> desc customer;
++-------------+-------------+------+-----+---------+-------+
+| Field       | Type        | Null | Key | Default | Extra |
++-------------+-------------+------+-----+---------+-------+
+| cust_id     | varchar(20) | NO   | PRI | NULL    |       |
+| cust_name   | varchar(20) | YES  |     | NULL    |       |
+| cust_addres | varchar(20) | YES  |     | NULL    |       |
+| cust_email  | varchar(20) | YES  |     | NULL    |       |
+| cust_ph_no  | int         | YES  |     | NULL    |       |
+| age         | int         | YES  |     | NULL    |       |
++-------------+-------------+------+-----+---------+-------+
+6 rows in set (0.00 sec)
+
+mysql> INSERT INTO customer VALUES(117,'ABC','Varale','abc@gmail.com',4489529482,20);
+ERROR 1264 (22003): Out of range value for column 'cust_ph_no' at row 1
+mysql> INSERT INTO customer VALUES(117,'ABC','Varale','abc@gmail.com',489529482,20);
+Query OK, 1 row affected (0.01 sec)
+
+mysql> INSERT INTO account VALUES(218,117,'Saving',100.50,'2025-01-01');
+Query OK, 1 row affected (0.01 sec)
+
+mysql> desc transaction;
++-----------+---------------+------+-----+-----------+-------------------+
+| Field     | Type          | Null | Key | Default   | Extra             |
++-----------+---------------+------+-----+-----------+-------------------+
+| tran_id   | int           | NO   | PRI | NULL      |                   |
+| ac_id     | int           | YES  | MUL | NULL      |                   |
+| tran_type | varchar(50)   | YES  |     | NULL      |                   |
+| amount    | decimal(10,2) | YES  |     | NULL      |                   |
+| tran_date | date          | YES  | MUL | curdate() | DEFAULT_GENERATED |
++-----------+---------------+------+-----+-----------+-------------------+
+5 rows in set (0.00 sec)
+
+mysql> INSERT INTO transaction VALUES (218,117,'bhim upi',200,'2025-01-01');
+ERROR 1452 (23000): Cannot add or update a child row: a foreign key constraint fails (`bank`.`transaction`, CONSTRAINT `transaction_ibfk_1` FOREIGN KEY (`ac_id`) REFERENCES `account` (`ac_id`))
+mysql> SELECT * FROM account;
++-------+---------+---------+----------+-------------+
+| ac_id | cust_id | ac_type | balance  | create_date |
++-------+---------+---------+----------+-------------+
+|   111 | A101    | saving  | 26000.00 | 2025-07-29  |
+|   112 | A102    | saving  | 29000.00 | 2025-07-29  |
+|   113 | A103    | saving  | 30000.00 | 2025-07-29  |
+|   114 | A104    | saving  | 31000.00 | 2025-07-29  |
+|   218 | 117     | Saving  |   100.50 | 2025-01-01  |
++-------+---------+---------+----------+-------------+
+5 rows in set (0.00 sec)
+
+
+mysql> UPDATE account SET cust_id = 'A105' WHERE cust_id = 'C101';
+Query OK, 0 rows affected (0.00 sec)
+Rows matched: 0  Changed: 0  Warnings: 0

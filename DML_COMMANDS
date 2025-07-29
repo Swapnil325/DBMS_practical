@@ -1,0 +1,133 @@
+C:\Program Files\MySQL\MySQL Server 8.0\bin>mysql -h localhost -u root -p
+Enter password: ****
+Welcome to the MySQL monitor.  Commands end with ; or \g.
+Your MySQL connection id is 8
+Server version: 8.0.42 MySQL Community Server - GPL
+
+Copyright (c) 2000, 2025, Oracle and/or its affiliates.
+
+Oracle is a registered trademark of Oracle Corporation and/or its
+affiliates. Other names may be trademarks of their respective
+owners.
+
+Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
+
+mysql> showdatabases;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'showdatabases' at line 1
+mysql> show databases;
++--------------------+
+| Database           |
++--------------------+
+| information_schema |
+| mysql              |
+| performance_schema |
+| sys                |
++--------------------+
+4 rows in set (0.12 sec)
+
+mysql> create database bank;
+Query OK, 1 row affected (0.04 sec)
+
+mysql> use bank;
+Database changed
+mysql> create table customer (cust_id VARCHAR(20),cust_name VARCHAR(20),cust_addres VARCHAR(20),cust_email VARCHAR(20),cust_ph_no int(10));
+Query OK, 0 rows affected, 1 warning (0.07 sec)
+
+mysql> show tables;
++----------------+
+| Tables_in_bank |
++----------------+
+| customer       |
++----------------+
+1 row in set (0.03 sec)
+
+mysql> ALTER TABLE customer ADD PRIMARY KEY (cust_id);
+Query OK, 0 rows affected (0.10 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> INSERT INTO customer values ('A101','swapnil','pune','swap@gmail.com',5664166641);
+ERROR 1264 (22003): Out of range value for column 'cust_ph_no' at row 1
+mysql> INSERT INTO customer values ('A101','swapnil','pune','swap@gmail.com',566416664);
+Query OK, 1 row affected (0.03 sec)
+
+mysql> select* from customer;
++---------+-----------+-------------+----------------+------------+
+| cust_id | cust_name | cust_addres | cust_email     | cust_ph_no |
++---------+-----------+-------------+----------------+------------+
+| A101    | swapnil   | pune        | swap@gmail.com |  566416664 |
++---------+-----------+-------------+----------------+------------+
+1 row in set (0.02 sec)
+
+mysql> INSERT INTO customer values ('A102','abhi','kolhapur','abhi@gmail.com',56461946);
+Query OK, 1 row affected (0.03 sec)
+
+mysql> INSERT INTO customer values ('A103','swaroop','kolhapur','swaroop@gmail.com',59469825);
+Query OK, 1 row affected (0.03 sec)
+
+mysql> INSERT INTO customer values ('A104','atharv','kolhapur','atharv@gmail.com',94654157);
+Query OK, 1 row affected (0.03 sec)
+
+mysql> select* from customer;
++---------+-----------+-------------+-------------------+------------+
+| cust_id | cust_name | cust_addres | cust_email        | cust_ph_no |
++---------+-----------+-------------+-------------------+------------+
+| A101    | swapnil   | pune        | swap@gmail.com    |  566416664 |
+| A102    | abhi      | kolhapur    | abhi@gmail.com    |   56461946 |
+| A103    | swaroop   | kolhapur    | swaroop@gmail.com |   59469825 |
+| A104    | atharv    | kolhapur    | atharv@gmail.com  |   94654157 |
++---------+-----------+-------------+-------------------+------------+
+4 rows in set (0.00 sec)
+
+mysql> ALTER TABLE customer ADD COLUMN age int;
+Query OK, 0 rows affected (0.04 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> ALTERR TABLE customer SET age=19 where cust_name='swapnil';
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'ALTERR TABLE customer SET age=19 where cust_name='swapnil'' at line 1
+mysql> UPDATE customer SET age=19 where cust_name='swapnil';
+Query OK, 1 row affected (0.03 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> select* from customer;
++---------+-----------+-------------+-------------------+------------+------+
+| cust_id | cust_name | cust_addres | cust_email        | cust_ph_no | age  |
++---------+-----------+-------------+-------------------+------------+------+
+| A101    | swapnil   | pune        | swap@gmail.com    |  566416664 |   19 |
+| A102    | abhi      | kolhapur    | abhi@gmail.com    |   56461946 | NULL |
+| A103    | swaroop   | kolhapur    | swaroop@gmail.com |   59469825 | NULL |
+| A104    | atharv    | kolhapur    | atharv@gmail.com  |   94654157 | NULL |
++---------+-----------+-------------+-------------------+------------+------+
+4 rows in set (0.00 sec)
+
+mysql> INSERT INTO customer values ('A105','abc','kolhapur','abc@gmail.com',95462324);
+ERROR 1136 (21S01): Column count doesn't match value count at row 1
+mysql> INSERT INTO customer values ('A105','abc','kolhapur','abc@gmail.com',95462324,20);
+Query OK, 1 row affected (0.03 sec)
+
+mysql> select* from customer;
++---------+-----------+-------------+-------------------+------------+------+
+| cust_id | cust_name | cust_addres | cust_email        | cust_ph_no | age  |
++---------+-----------+-------------+-------------------+------------+------+
+| A101    | swapnil   | pune        | swap@gmail.com    |  566416664 |   19 |
+| A102    | abhi      | kolhapur    | abhi@gmail.com    |   56461946 | NULL |
+| A103    | swaroop   | kolhapur    | swaroop@gmail.com |   59469825 | NULL |
+| A104    | atharv    | kolhapur    | atharv@gmail.com  |   94654157 | NULL |
+| A105    | abc       | kolhapur    | abc@gmail.com     |   95462324 |   20 |
++---------+-----------+-------------+-------------------+------------+------+
+5 rows in set (0.00 sec)
+
+mysql> delte from customer where cust_id='A105';
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'delte from customer where cust_id='A105'' at line 1
+mysql> delete from customer where cust_id='A105';
+Query OK, 1 row affected (0.03 sec)
+
+mysql> select* from customer;
++---------+-----------+-------------+-------------------+------------+------+
+| cust_id | cust_name | cust_addres | cust_email        | cust_ph_no | age  |
++---------+-----------+-------------+-------------------+------------+------+
+| A101    | swapnil   | pune        | swap@gmail.com    |  566416664 |   19 |
+| A102    | abhi      | kolhapur    | abhi@gmail.com    |   56461946 | NULL |
+| A103    | swaroop   | kolhapur    | swaroop@gmail.com |   59469825 | NULL |
+| A104    | atharv    | kolhapur    | atharv@gmail.com  |   94654157 | NULL |
++---------+-----------+-------------+-------------------+------------+------+
+4 rows in set (0.00 sec)

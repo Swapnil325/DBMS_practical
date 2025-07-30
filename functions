@@ -1,0 +1,457 @@
+Microsoft Windows [Version 10.0.26100.4652]
+(c) Microsoft Corporation. All rights reserved.
+
+C:\Program Files\MySQL\MySQL Server 8.0\bin>mysql -h localhost -u root -p
+Enter password: ****
+Welcome to the MySQL monitor.  Commands end with ; or \g.
+Your MySQL connection id is 12
+Server version: 8.0.42 MySQL Community Server - GPL
+
+Copyright (c) 2000, 2025, Oracle and/or its affiliates.
+
+Oracle is a registered trademark of Oracle Corporation and/or its
+affiliates. Other names may be trademarks of their respective
+owners.
+
+Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
+
+mysql> show databases;
++--------------------+
+| Database           |
++--------------------+
+| bank               |
+| information_schema |
+| mysql              |
+| performance_schema |
+| sys                |
++--------------------+
+5 rows in set (0.00 sec)
+
+mysql> SELECT   left('swwapnil',4)
+    -> ;
++--------------------+
+| left('swwapnil',4) |
++--------------------+
+| swwa               |
++--------------------+
+1 row in set (0.02 sec)
+
+mysql> SELECT insert('DYPCOEI',3,4,'VARALE')
+    -> ;
++--------------------------------+
+| insert('DYPCOEI',3,4,'VARALE') |
++--------------------------------+
+| DYVARALEI                      |
++--------------------------------+
+1 row in set (0.00 sec)
+
+mysql> SELCET format (123.456,3)
+    -> ;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'SELCET format (123.456,3)' at line 1
+mysql> SELCET format (123.4567,3)
+    -> ;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'SELCET format (123.4567,3)' at line 1
+mysql> use bank;
+Database changed
+mysql> show tables;
++----------------+
+| Tables_in_bank |
++----------------+
+| account        |
+| customer       |
+| employee       |
+| transaction    |
+| view1          |
++----------------+
+5 rows in set (0.01 sec)
+
+mysql> select*from account;
++-------+---------+---------+----------+-------------+
+| ac_id | cust_id | ac_type | balance  | create_date |
++-------+---------+---------+----------+-------------+
+|   111 | A101    | saving  | 26000.00 | 2025-07-29  |
+|   112 | A102    | saving  | 29000.00 | 2025-07-29  |
+|   113 | A103    | saving  | 30000.00 | 2025-07-29  |
+|   114 | A104    | saving  | 31000.00 | 2025-07-29  |
+|   218 | 117     | Saving  |   100.50 | 2025-01-01  |
++-------+---------+---------+----------+-------------+
+5 rows in set (0.00 sec)
+
+mysql> slect sum(balance);
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'slect sum(balance)' at line 1
+mysql> select from account sum(blance);
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'from account sum(blance)' at line 1
+mysql>
+mysql> select sum(blance) FROM account;
+ERROR 1054 (42S22): Unknown column 'blance' in 'field list'
+mysql> select sum(balance) FROM account;
++--------------+
+| sum(balance) |
++--------------+
+|    116100.50 |
++--------------+
+1 row in set (0.00 sec)
+
+mysql> select avg(balance) FROM account;
++--------------+
+| avg(balance) |
++--------------+
+| 23220.100000 |
++--------------+
+1 row in set (0.00 sec)
+
+mysql> select max(balance) FROM account;
++--------------+
+| max(balance) |
++--------------+
+|     31000.00 |
++--------------+
+1 row in set (0.00 sec)
+
+mysql> select min(balance) FROM account;
++--------------+
+| min(balance) |
++--------------+
+|       100.50 |
++--------------+
+1 row in set (0.00 sec)
+
+mysql> select counte(balance) FROM account;
+ERROR 1305 (42000): FUNCTION bank.counte does not exist
+mysql> select count(balance) FROM account;
++----------------+
+| count(balance) |
++----------------+
+|              5 |
++----------------+
+1 row in set (0.02 sec)
+
+mysql> select*from customer;
++---------+-----------+-------------+-------------------+------------+------+
+| cust_id | cust_name | cust_addres | cust_email        | cust_ph_no | age  |
++---------+-----------+-------------+-------------------+------------+------+
+| 117     | ABC       | Varale      | abc@gmail.com     |  489529482 |   20 |
+| A101    | swapnil   | pune        | swap@gmail.com    |  566416664 |   19 |
+| A102    | abhi      | kolhapur    | abhi@gmail.com    |   56461946 | NULL |
+| A103    | swaroop   | kolhapur    | swaroop@gmail.com |   59469825 | NULL |
+| A104    | atharv    | kolhapur    | atharv@gmail.com  |   94654157 | NULL |
++---------+-----------+-------------+-------------------+------------+------+
+5 rows in set (0.00 sec)
+
+mysql> SELECT cust_email, INSTR(cust_email, '@') AS at_position FROM customer;
++-------------------+-------------+
+| cust_email        | at_position |
++-------------------+-------------+
+| abc@gmail.com     |           4 |
+| swap@gmail.com    |           5 |
+| abhi@gmail.com    |           5 |
+| swaroop@gmail.com |           8 |
+| atharv@gmail.com  |           7 |
++-------------------+-------------+
+5 rows in set (0.02 sec)
+
+mysql> SELECT CONCAT('swapnil','chougule');
++------------------------------+
+| CONCAT('swapnil','chougule') |
++------------------------------+
+| swapnilchougule              |
++------------------------------+
+1 row in set (0.00 sec)
+
+mysql> select format(123.12345,2);
++---------------------+
+| format(123.12345,2) |
++---------------------+
+| 123.12              |
++---------------------+
+1 row in set (0.00 sec)
+
+mysql> find_in_set(a,'b,a,c,d,e,r')
+    -> ;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'find_in_set(a,'b,a,c,d,e,r')' at line 1
+mysql> find_in_set('a','b,a,c,d,e,r')
+    -> ;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'find_in_set('a','b,a,c,d,e,r')' at line 1
+mysql> SELECT find_in_set('a','b,a,c,d,e,r')
+    -> ;
++--------------------------------+
+| find_in_set('a','b,a,c,d,e,r') |
++--------------------------------+
+|                              2 |
++--------------------------------+
+1 row in set (0.00 sec)
+
+mysql> select left(cust_name,4) FROM cutomer;
+ERROR 1146 (42S02): Table 'bank.cutomer' doesn't exist
+mysql>
+mysql> select left(cust_name,4) FROM customer;
++-------------------+
+| left(cust_name,4) |
++-------------------+
+| ABC               |
+| swap              |
+| abhi              |
+| swar              |
+| atha              |
++-------------------+
+5 rows in set (0.00 sec)
+
+mysql> SELECT format(balance,1) from account;
++-------------------+
+| format(balance,1) |
++-------------------+
+| 26,000.0          |
+| 29,000.0          |
+| 30,000.0          |
+| 31,000.0          |
+| 100.5             |
++-------------------+
+5 rows in set (0.00 sec)
+
+mysql> select insert(cust_name,4,3,'dyp');
+ERROR 1054 (42S22): Unknown column 'cust_name' in 'field list'
+mysql> select insert(cust_name,4,3,'dyp') FROM customer;
++-----------------------------+
+| insert(cust_name,4,3,'dyp') |
++-----------------------------+
+| ABC                         |
+| swadypl                     |
+| abhdyp                      |
+| swadypp                     |
+| athdyp                      |
++-----------------------------+
+5 rows in set (0.00 sec)
+
+mysql> select ac_id ROUND(blance) from account;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '(blance) from account' at line 1
+mysql> select ac_id, ROUND(blance) from account;
+ERROR 1054 (42S22): Unknown column 'blance' in 'field list'
+mysql> select ac_id, ROUND(balance) from account;
++-------+----------------+
+| ac_id | ROUND(balance) |
++-------+----------------+
+|   111 |          26000 |
+|   112 |          29000 |
+|   113 |          30000 |
+|   114 |          31000 |
+|   218 |            101 |
++-------+----------------+
+5 rows in set (0.00 sec)
+
+mysql> select ac_id, abs(balance) from account;
++-------+--------------+
+| ac_id | abs(balance) |
++-------+--------------+
+|   111 |     26000.00 |
+|   112 |     29000.00 |
+|   113 |     30000.00 |
+|   114 |     31000.00 |
+|   218 |       100.50 |
++-------+--------------+
+5 rows in set (0.02 sec)
+
+mysql> select ac_id, SQRT(balance) from account;
++-------+--------------------+
+| ac_id | SQRT(balance)      |
++-------+--------------------+
+|   111 | 161.24515496597098 |
+|   112 | 170.29386365926402 |
+|   113 | 173.20508075688772 |
+|   114 |  176.0681686165901 |
+|   218 | 10.024968827881711 |
++-------+--------------------+
+5 rows in set (0.02 sec)
+
+
+mysql> SELECT POWER(balance,2) FROM account;
++------------------+
+| POWER(balance,2) |
++------------------+
+|        676000000 |
+|        841000000 |
+|        900000000 |
+|        961000000 |
+|         10100.25 |
++------------------+
+5 rows in set (0.00 sec)
+
+mysql> SELECT DATE_ADD(create_date, INTERVAL 10 DAY)from account;
++----------------------------------------+
+| DATE_ADD(create_date, INTERVAL 10 DAY) |
++----------------------------------------+
+| 2025-08-08                             |
+| 2025-08-08                             |
+| 2025-08-08                             |
+| 2025-08-08                             |
+| 2025-01-11                             |
++----------------------------------------+
+5 rows in set (0.02 sec)
+
+mysql> selecft extract (day,'2025-07-08') from account;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'selecft extract (day,'2025-07-08') from account' at line 1
+mysql> select extract (day,'2025-07-08') from account;
+ERROR 1630 (42000): FUNCTION bank.extract does not exist. Check the 'Function Name Parsing and Resolution' section in the Reference Manual
+mysql> select extract (day from,'2025-07-08') from account;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'from,'2025-07-08') from account' at line 1
+mysql> SELECT EXTRACT(DAY FROM '2025-07-08');
++--------------------------------+
+| EXTRACT(DAY FROM '2025-07-08') |
++--------------------------------+
+|                              8 |
++--------------------------------+
+1 row in set (0.00 sec)
+
+mysql> SELECT EXTRACT(year FROM '2025-07-08');
++---------------------------------+
+| EXTRACT(year FROM '2025-07-08') |
++---------------------------------+
+|                            2025 |
++---------------------------------+
+1 row in set (0.00 sec)
+
+mysql> SELECT EXTRACT(month FROM '2025-07-08');
++----------------------------------+
+| EXTRACT(month FROM '2025-07-08') |
++----------------------------------+
+|                                7 |
++----------------------------------+
+1 row in set (0.00 sec)
+
+mysql> select datediff('2025-06-2','2025-05-2')
+    -> ;
++-----------------------------------+
+| datediff('2025-06-2','2025-05-2') |
++-----------------------------------+
+|                                31 |
++-----------------------------------+
+1 row in set (0.02 sec)
+
+mysql> select day_name('2025-06-2')
+    -> ;
+ERROR 1305 (42000): FUNCTION bank.day_name does not exist
+mysql> create table x(a int, b int);
+Query OK, 0 rows affected (0.08 sec)
+
+mysql> create table y(x innt ,y int);
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'innt ,y int)' at line 1
+mysql> create table y(x int ,y int);
+Query OK, 0 rows affected (0.04 sec)
+
+mysql> insert into x values(10,22);
+Query OK, 1 row affected (0.01 sec)
+
+mysql> insert into x values(12,21);
+Query OK, 1 row affected (0.01 sec)
+
+mysql> insert into x values(11,23);
+Query OK, 1 row affected (0.02 sec)
+
+mysql> insert into x values(15,24);
+Query OK, 1 row affected (0.03 sec)
+
+mysql> insert into x values(12,25);
+Query OK, 1 row affected (0.03 sec)
+
+mysql> insert into y values(12,25);
+Query OK, 1 row affected (0.03 sec)
+
+mysql> insert into y values(15,24);
+Query OK, 1 row affected (0.03 sec)
+
+mysql> insert into y values(14,26);
+Query OK, 1 row affected (0.03 sec)
+
+mysql> insert into y values(17,31);
+Query OK, 1 row affected (0.02 sec)
+
+mysql> select * from x;
++------+------+
+| a    | b    |
++------+------+
+|   10 |   22 |
+|   12 |   21 |
+|   11 |   23 |
+|   15 |   24 |
+|   12 |   25 |
++------+------+
+5 rows in set (0.00 sec)
+
+mysql> select * from y;
++------+------+
+| x    | y    |
++------+------+
+|   12 |   25 |
+|   15 |   24 |
+|   14 |   26 |
+|   17 |   31 |
++------+------+
+4 rows in set (0.00 sec)
+
+mysql> insert into y values(12,65);
+Query OK, 1 row affected (0.03 sec)
+
+mysql>
+mysql> select * from x uinionall select*from y;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'select*from y' at line 1
+mysql> select * from x uinionall select * from y;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'select * from y' at line 1
+mysql> select * from x uinion all select * from y;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'all select * from y' at line 1
+mysql> select * from x union all select * from y;
++------+------+
+| a    | b    |
++------+------+
+|   10 |   22 |
+|   12 |   21 |
+|   11 |   23 |
+|   15 |   24 |
+|   12 |   25 |
+|   12 |   25 |
+|   15 |   24 |
+|   14 |   26 |
+|   17 |   31 |
+|   12 |   65 |
++------+------+
+10 rows in set (0.00 sec)
+
+mysql> select * from x union  select * from y;
++------+------+
+| a    | b    |
++------+------+
+|   10 |   22 |
+|   12 |   21 |
+|   11 |   23 |
+|   15 |   24 |
+|   12 |   25 |
+|   14 |   26 |
+|   17 |   31 |
+|   12 |   65 |
++------+------+
+8 rows in set (0.02 sec)
+
+mysql> select DAYNAE(create_date) from account;
+ERROR 1305 (42000): FUNCTION bank.DAYNAE does not exist
+mysql> select DAYNAME(create_date) from account;
++----------------------+
+| DAYNAME(create_date) |
++----------------------+
+| Tuesday              |
+| Tuesday              |
+| Tuesday              |
+| Tuesday              |
+| Wednesday            |
++----------------------+
+5 rows in set (0.02 sec)
+
+mysql> select week(create_date) from account;
++-------------------+
+| week(create_date) |
++-------------------+
+|                30 |
+|                30 |
+|                30 |
+|                30 |
+|                 0 |
++-------------------+
+5 rows in set (0.00 sec)
+

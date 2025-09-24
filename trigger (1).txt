@@ -1,0 +1,158 @@
+
+SQL*Plus: Release 23.0.0.0.0 - Production on Wed Sep 10 15:38:05 2025
+Version 23.9.0.25.07
+
+Copyright (c) 1982, 2025, Oracle.  All rights reserved.
+
+Enter user-name: SYSTEM
+Enter password:
+Last Successful login time: Tue Sep 09 2025 12:17:09 +05:30
+
+Connected to:
+Oracle Database 23ai Free Release 23.0.0.0.0 - Develop, Learn, and Run for Free
+Version 23.9.0.25.07
+
+SQL> CREATE TABLE clientmaster (
+  2      EmpNo NUMBER,
+  3      Lname VARCHAR2(50),
+  4      Salary NUMBER(5)
+  5  );
+
+Table created.
+
+SQL> CREATE TABLE client_audit (
+  2      EmpNo NUMBER,
+  3      Lname VARCHAR2(50),
+  4      changedat TIMESTAMP,
+  5      action VARCHAR2(50)
+  6  );
+
+Table created.
+
+SQL> INSERT INTO clientmaster VALUES
+  2       (101, 'John', 9000),
+  3       (102, 'Pawar', 9000),
+  4       (103, 'Jagruti', 7000);
+
+3 rows created.
+
+SQL> @E:\trigger1.sql
+
+Trigger created.
+
+SQL> SELECT * FROM clientmaster;
+
+     EMPNO LNAME                                                  SALARY
+---------- -------------------------------------------------- ----------
+       101 John                                                     9000
+       102 Pawar                                                    9000
+       103 Jagruti                                                  7000
+
+SQL> UPDATE clientmaster
+  2  SET Salary = Salary + 500
+  3  WHERE EmpNo = 101;
+
+1 row updated.
+
+SQL> SELECT * FROM client_audit;
+
+     EMPNO LNAME
+---------- --------------------------------------------------
+CHANGEDAT
+---------------------------------------------------------------------------
+ACTION
+--------------------------------------------------
+       101 John
+10-SEP-25 03.40.16.000000 PM
+update
+
+
+SQL> CREATE OR REPLACE TRIGGER XYZ2
+  2  BEFORE UPDATE OR DELETE
+  3  ON auditt
+  4  FOR EACH ROW
+  5  BEGIN
+  6    if rtrim(upper(To_char(sysdate,'day')))='WEDNESDAY' then
+  7      RAISE_APPLICATION_ERROR(-200011,'Cannot perform update or delete operation');
+  8    end if;
+  9  END;
+ 10  /
+ON auditt
+   *
+ERROR at line 3:
+ORA-00942: table or view "SYSTEM"."AUDITT" does not exist
+Help: https://docs.oracle.com/error-help/db/ora-00942/
+
+
+SQL> @E:\newtrig.sql
+
+Trigger created.
+
+SQL> SELECT table_name FROM user_tables;
+
+TABLE_NAME
+--------------------------------------------------------------------------------
+MVIEW$_ADV_WORKLOAD
+MVIEW$_ADV_BASETABLE
+MVIEW$_ADV_SQLDEPEND
+MVIEW$_ADV_PRETTY
+MVIEW$_ADV_TEMP
+MVIEW$_ADV_FILTER
+MVIEW$_ADV_LOG
+MVIEW$_ADV_FILTERINSTANCE
+MVIEW$_ADV_LEVEL
+MVIEW$_ADV_ROLLUP
+MVIEW$_ADV_AJG
+
+TABLE_NAME
+--------------------------------------------------------------------------------
+MVIEW$_ADV_FJG
+MVIEW$_ADV_GC
+MVIEW$_ADV_CLIQUE
+MVIEW$_ADV_ELIGIBLE
+MVIEW$_ADV_OUTPUT
+MVIEW$_ADV_EXCEPTIONS
+MVIEW$_ADV_PARAMETERS
+MVIEW$_ADV_INFO
+MVIEW$_ADV_JOURNAL
+MVIEW$_ADV_PLAN
+AQ$_SCHEDULES
+
+TABLE_NAME
+--------------------------------------------------------------------------------
+OL$
+OL$HINTS
+OL$NODES
+SCHEDULER_PROGRAM_ARGS_TBL
+SCHEDULER_JOB_ARGS_TBL
+SQLPLUS_PRODUCT_PROFILE
+HELP
+AREA
+DEMOA3
+BORROWER
+FINE
+
+TABLE_NAME
+--------------------------------------------------------------------------------
+EMPLOYEE
+CLIENTMASTER
+CLIENT_AUDIT
+CIRCLEAREA
+BORROW
+FINED
+STUDENT_MARK
+RESULT_GRADE
+REDO_DB
+REDO_LOG
+
+43 rows selected.
+
+SQL> UPDATE clientmaster SET salary = salary + 1000 WHERE empno = 101;
+UPDATE clientmaster SET salary = salary + 1000 WHERE empno = 101
+       *
+ERROR at line 1:
+ORA-21000: error number argument to raise_application_error of -200011 is out
+of range
+ORA-06512: at "SYSTEM.XYZ2", line 3
+ORA-04088: error during execution of trigger 'SYSTEM.XYZ2'
+Help: https://docs.oracle.com/error-help/db/ora-21000/

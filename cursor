@@ -1,0 +1,204 @@
+***************  explicit cursor ********************
+
+DECLARE
+CURSOR prod_cursor is select pid, pname, price from product;
+
+v_id    product.pid%TYPE;
+v_name  product.pname%TYPE;
+v_price product.price%TYPE;
+BEGIN
+OPEN prod_cursor;
+LOOP
+FETCH prod_cursor into v_id, v_name, v_price;
+EXIT when prod_cursor%NOTFOUND;
+DBMS_OUTPUT.PUT_LINE('ID: ' || v_id || ', Name: ' || v_name || ', Price: ' || v_price);
+END LOOP;
+CLOSE prod_cursor;
+END;
+/
+
+
+
+************** implicit ******************************
+BEGIN
+insert into product (pid, pname, price) values (3, 'tablet', 18000.00);
+
+DBMS_OUTPUT.PUT_LINE('Rows inserted: ' || SQL%ROWCOUNT);
+END;
+/
+
+
+
+************** parameterized cursor ***********
+
+DECLARE
+CURSOR price_cursor(p_min_price NUMBER) is select pid, pname, price from product where price > p_min_price;
+
+v_id    product.pid%TYPE;
+v_name  product.pname%TYPE;
+v_price product.price%TYPE;
+
+BEGIN
+OPEN price_cursor(10000);
+LOOP
+FETCH price_cursor INTO v_id, v_name, v_price;
+EXIT WHEN price_cursor%NOTFOUND;
+
+DBMS_OUTPUT.PUT_LINE('ID: ' || v_id || ', Name: ' || v_name || ', Price: ' || v_price);
+END LOOP;
+CLOSE price_cursor;
+END;
+/
+
+
+****************** update ****************
+
+DECLARE
+CURSOR prod_cursor IS
+SELECT pid, price FROM product WHERE price < 5000;
+v_pid product.pid%TYPE;
+v_price product.price%TYPE;
+BEGIN
+OPEN prod_cursor;
+LOOP 
+FETCH prod_cursor INTO v_pid, v_price;
+ EXIT WHEN prod_cursor%NOTFOUND;
+UPDATE product 
+SET price= v_price* 1.10 
+WHERE pid= v_pid; 
+END LOOP;
+CLOSE prod_cursor;
+COMMIT;
+DBMS_OUTPUT.PUT_LINE('Prices updated.');
+END;
+/
+
+
+*************** OUT PUT *****************
+
+
+SQL*Plus: Release 21.0.0.0.0 - Production on Wed Sep 24 23:26:10 2025
+Version 21.3.0.0.0
+
+Copyright (c) 1982, 2021, Oracle.  All rights reserved.
+
+Enter user-name: system
+Enter password:
+Last Successful login time: Wed Sep 24 2025 23:07:07 +05:30
+
+Connected to:
+Oracle Database 21c Express Edition Release 21.0.0.0.0 - Production
+Version 21.3.0.0.0
+
+SQL> create table product(pid number(10), pname varchar2(20),price number (10,2));
+
+Table created.
+
+SQL> insert into product (pid,pname,price) values ( 1,'phone',50000.00);
+
+1 row created.
+
+SQL> insert into product (pid,pname,price) values ( 2,'pc',80000.00);
+
+1 row created.
+
+SQL> commit;
+
+Commit complete.
+
+SQL> select * from product;
+
+       PID PNAME                     PRICE
+---------- -------------------- ----------
+         1 phone                     50000
+         2 pc                        80000
+
+SQL> @C:\Users\swapn\Downloads\implicit.sql
+
+PL/SQL procedure successfully completed.
+
+SQL> select * from product;
+
+       PID PNAME                     PRICE
+---------- -------------------- ----------
+         1 phone                     50000
+         2 pc                        80000
+         3 tablet                    18000
+
+SQL> @C:\Users\swapn\Downloads\explicit.sql
+
+PL/SQL procedure successfully completed.
+
+SQL>  select * from product;
+
+       PID PNAME                     PRICE
+---------- -------------------- ----------
+         1 phone                     50000
+         2 pc                        80000
+         3 tablet                    18000
+
+SQL> @C:\Users\swapn\Downloads\parameterized.sql
+
+PL/SQL procedure successfully completed.
+
+SQL>  select * from product;
+
+       PID PNAME                     PRICE
+---------- -------------------- ----------
+         1 phone                     50000
+         2 pc                        80000
+         3 tablet                    18000
+
+SQL> insert into product (pid,pname,price) values ( 4,'headphone',6000.00);
+
+1 row created.
+
+SQL> select * from product;
+
+       PID PNAME                     PRICE
+---------- -------------------- ----------
+         1 phone                     50000
+         2 pc                        80000
+         3 tablet                    18000
+         4 headphone                  6000
+
+SQL> @C:\Users\swapn\Downloads\update.sql
+
+PL/SQL procedure successfully completed.
+
+SQL> select * from product;
+
+       PID PNAME                     PRICE
+---------- -------------------- ----------
+         1 phone                     50000
+         2 pc                        80000
+         3 tablet                    18000
+         4 headphone                  6000
+
+SQL>  insert into product (pid,pname,price) values ( 5,'charger',5000.00);
+
+1 row created.
+
+SQL> select * from product;
+
+       PID PNAME                     PRICE
+---------- -------------------- ----------
+         1 phone                     50000
+         2 pc                        80000
+         3 tablet                    18000
+         4 headphone                  6000
+         5 charger                    5000
+
+SQL> @C:\Users\swapn\Downloads\update.sql
+
+PL/SQL procedure successfully completed.
+
+SQL> select * from product;
+
+       PID PNAME                     PRICE
+---------- -------------------- ----------
+         1 phone                     50000
+         2 pc                        80000
+         3 tablet                    18000
+         4 headphone                  6000
+         5 charger                    5000

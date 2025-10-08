@@ -73,6 +73,28 @@ DBMS_OUTPUT.PUT_LINE('Prices updated.');
 END;
 /
 
+************** for ********
+BEGIN
+  FOR rec IN (SELECT product_id, name FROM product) LOOP
+     DBMS_OUTPUT.PUT_LINE(rec.product_id || '-' || rec.name);
+  END LOOP;
+END;
+/
+
+**************ref********************
+
+
+DECLARE
+   TYPE rc IS REF CURSOR; c rc;
+   v_name product.name%TYPE;
+BEGIN
+   OPEN c FOR SELECT name FROM product;
+   FETCH c INTO v_name;
+   DBMS_OUTPUT.PUT_LINE(v_name);
+   CLOSE c;
+END;
+/
+
 
 *************** OUT PUT *****************
 

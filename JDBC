@@ -20,6 +20,168 @@ public class Sql {
     }
 }
 
+************* result  java ************
+package dbms;
+
+import java.sql.*;
+import java.util.Scanner;
+
+public class Resultset {
+
+	public static void main(String[] args) {
+		try {
+			Class.forName("com.mysql.cj.jdbc.Driver");
+			Connection con=DriverManager.getConnection("jdbc:mysql://localhost:3306/demo","root","root");
+			Statement st= con.createStatement();
+			
+			ResultSet rs=st.executeQuery("Select *from student");
+			while (rs.next()) {
+				System.out.println("Roll no: "+rs.getInt("rollno"));
+				System.out.println("Name: "+rs.getString("name"));
+				System.out.println("Address: "+rs.getString("address"));
+		    }
+			
+		}
+		catch(Exception e) {
+			System.out.println(e);
+		
+	}
+
+	}
+}
+
+
+
+**************student data java********
+package dbms;
+import java.sql.*;
+import java.util.*;
+
+public class Studdata {
+
+	public static void main(String[] args) {
+		try {
+			Class.forName("com.mysql.cj.jdbc.Driver");
+			Connection con=DriverManager.getConnection("jdbc:mysql://localhost:3306/demo","root","root");
+			Statement st= con.createStatement();
+			//String str="create table student(rollno int, name varchar(20),address varchar(20)) ";
+			//st.executeUpdate(str);
+			//System.out.println("Table is created");
+			
+			Scanner sc=new Scanner(System.in);
+			int r;
+			String n;
+			String addr;
+			
+			System.out.println("Enter Roll no :");
+			r=sc.nextInt();
+			System.out.println("Enter Name :");
+			n=sc.next();
+			System.out.println("Enter Address :");
+			addr=sc.next();
+			
+			String str="insert into student values("+r+",'"+n+"','"+addr+"')";
+			st.executeUpdate(str);
+			
+			System.out.println("Data inserted successfully");
+			
+		}
+		catch(Exception e) {
+			System.out.println(e);
+		
+
+	}
+
+	}
+
+}
+**************student info java**********
+
+import java.util.*; 
+public class Studinfo {
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        String name;
+        int rollno;
+        String branch;
+        
+        System.out.println("Enter student name: ");
+        name = sc.nextLine();
+ 
+        System.out.println("Enter roll number: ");
+        rollno= sc.nextInt();
+        sc.nextLine();
+
+        System.out.println("Enter branch: ");
+        branch= sc.nextLine();
+
+        System.out.println("------Student Info------");
+        System.out.println("Name: "+name);
+        System.out.println("Roll no: "+rollno);
+        System.out.println("Branch: "+branch);
+        
+        sc.close();
+    }
+}
+
+*********** out put *********
+
+Enter password: *********
+Welcome to the MySQL monitor.  Commands end with ; or \g.
+Your MySQL connection id is 13
+Server version: 8.0.43 MySQL Community Server - GPL
+
+Copyright (c) 2000, 2025, Oracle and/or its affiliates.
+
+Oracle is a registered trademark of Oracle Corporation and/or its
+affiliates. Other names may be trademarks of their respective
+owners.
+
+Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
+
+mysql> show databases;
++--------------------+
+| Database           |
++--------------------+
+| bank               |
+| information_schema |
+| mysql              |
+| performance_schema |
+| sys                |
++--------------------+
+5 rows in set (0.03 sec)
+
+mysql> show databases;
++--------------------+
+| Database           |
++--------------------+
+| bank               |
+| demo               |
+| information_schema |
+| mysql              |
+| performance_schema |
+| sys                |
++--------------------+
+6 rows in set (0.00 sec)
+
+mysql> use demo;
+Database changed
+mysql> show tables;
++----------------+
+| Tables_in_demo |
++----------------+
+| student        |
++----------------+
+1 row in set (0.02 sec)
+
+mysql> select * from student;
++--------+-------+---------+
+| rollno | name  | address |
++--------+-------+---------+
+|    101 | swapnil | pune    |
++--------+-------+---------+
+1 row in set (0.00 sec)
+
 
 ************** switch java ************
 import java.sql.*;
@@ -113,3 +275,72 @@ public class connector {
 	
 
 }
+************************* out put*********************\
+Choose Operation:
+1. Insert
+2. Update
+3. Delete
+4. Display
+5. Exit
+Enter choice: 1
+Enter Roll No: 1
+Enter Name: swapnil
+Enter Address: pune
+Record Inserted!
+Choose Operation:
+1. Insert
+2. Update
+3. Delete
+4. Display
+5. Exit
+Enter choice: 1
+Enter Roll No: 2
+Enter Name: abhi
+Enter Address: kolhapur
+Record Inserted!
+Choose Operation:
+1. Insert
+2. Update
+3. Delete
+4. Display
+5. Exit
+Enter choice: 1
+Enter Roll No: 3
+Enter Name: swaroop
+Enter Address: mumbai
+Record Inserted!
+Choose Operation:
+1. Insert
+2. Update
+3. Delete
+4. Display
+5. Exit
+Enter choice: 2
+Enter Roll No to Update: 2
+Enter New Name: atharva
+Record Updated!
+Choose Operation:
+1. Insert
+2. Update
+3. Delete
+4. Display
+5. Exit
+Enter choice: 3
+Enter Roll No to Delete: 2
+Record Deleted!
+Choose Operation:
+1. Insert
+2. Update
+3. Delete
+4. Display
+5. Exit
+Enter choice: 4
+Roll No	Name	Address
+1	swapnil 	pune
+3	swaroop 	Mumbai
+Choose Operation:
+1. Insert
+2. Update
+3. Delete
+4. Display
+5. Exit
